@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     public static int FoundSunmiPrinter = 0x00000002;
     public static int LostSunmiPrinter = 0x00000003;
 
+    public static int giEnablePrinter = 0;  // 0-disable , 1-enable
+
     public int sunmiPrinter = CheckSunmiPrinter;
     private SunmiPrinterService sunmiPrinterService;
 
@@ -57,36 +59,7 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(MainActivity.this, ForegroundService.class);
         startService(intent);
         Log.v("Jeffrey", "服務已建立 .. 01");
-       // startService();
 
-        /*
-        var mBuilder = NotificationCompat.Builder(this, "MyNotifi")
-                .setSmallIcon(R.drawable.notification_icon_background)
-                .setContentTitle("ha")
-                .setContentText("pp")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        startForeground(1,mBuilder.build())
-
-
-        //首次進入執行
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //Android 8.0以上要設定前景通知才能背景執行
-            //初始化通知
-            val mNotificationManager = getSystemService(NotificationManager::class.java)
-            val mChannel = NotificationChannel("01", "位置服務", NotificationManager.IMPORTANCE_MIN)
-            mChannel.enableVibration(false) //是否開啟震動
-            mChannel.enableLights(false) //是否開啟燈號閃爍
-            mNotificationManager.createNotificationChannel(mChannel)
-            val notification = NotificationCompat.Builder(this, "01")
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle("藍牙服務")
-                    .setContentText("背景服務執行中")
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setColor(getColor(R.color.black))
-                    .build()
-            // 服務通知第一個Int參數ID不能為0
-            startForeground(1, notification)
-        }
-        */
 
         // on create
         //----------------------------------------
@@ -104,61 +77,40 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         // printer init
-        //----------------------------------------
-        /*
-        int iPrintStatus = Settings.Global.getInt(getContentResolver(), "sunmi_printer", 0);
-        AlertDialog.Builder builder00 = new AlertDialog.Builder(MainActivity.this);
-        builder00.setTitle("列表機狀態");
-        switch(iPrintStatus)
-        {
-            case 0:
-                builder00.setMessage("偵測列表機 : 無");
-                break;
-            case 1:
-                builder00.setMessage("偵測列表機 : 有");
-                break;
-            case -1:
-                builder00.setMessage("偵測列表機 : 查詢中");
-                break;
-            default:
-                builder00.setMessage("偵測列表機 : 其他..");
-                break;
-
-        }
-        builder00.create().show();
-        */
-
-        // printer init
         //-----------------
+        if (giEnablePrinter==1)
+            initSunmiPrinterService(this); //this);
 
-        initSunmiPrinterService(this); //this);
-
-        if (sunmiPrinter == NoSunmiPrinter) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        /*
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        switch(sunmiPrinter)
+        {
+        case 0:
             builder.setTitle("列表機狀態");
             builder.setMessage("沒發現列表機");
             builder.create().show();
-        }
-        // print text
-        //---------------------------------------------
-        //printText();
-        /*
-        try {
-            sunmiPrinterService.printText("12345\n", null);
-        }
-        catch (RemoteException e){
-            AlertDialog.Builder builder99 = new AlertDialog.Builder(MainActivity.this);
-            builder99.setTitle("列表機狀態");
-            builder99.setMessage("列表發生問題!!");
-            builder99.create().show();
-        }
-        */
-        //initPrinter();
-        //PrinterSelfCheck();
-        //PrinterInfo();
+            break;
+        case 1:
+            builder.setTitle("列表機狀態");
+            builder.setMessage("偵測列表機 : 查詢中");
+            break;
+        case 2:
+            builder.setTitle("列表機狀態");
+            builder.setMessage("偵測列表機 : 開啟");
+            break;
+        case 3:
+            builder.setTitle("列表機狀態");
+            builder.setMessage("偵測列表機 : 關閉");
+            break;
+        default:
+            builder.setTitle("列表機狀態");
+            builder.setMessage("偵測列表機 : 未知狀況");
+            break;
 
-        //printerInit
+        }
+        builder.create().show();
 
+         */
 }
 
 
